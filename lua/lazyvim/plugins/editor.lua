@@ -7,25 +7,35 @@ return {
     cmd = "Neotree",
     keys = {
       {
-        "<leader>fe",
+        "<leader>fE",
         function()
           require("neo-tree.command").execute({ toggle = true, dir = LazyVim.root() })
         end,
         desc = "Explorer NeoTree (root dir)",
       },
       {
-        "<leader>fE",
+        "<leader>fe",
         function()
-          require("neo-tree.command").execute({ toggle = true, dir = vim.uv.cwd() })
+          require("neo-tree.command").execute({
+            toggle = true,
+            dir = vim.uv.cwd(),
+            position = "current",
+            reveal = true,
+          })
         end,
         desc = "Explorer NeoTree (cwd)",
       },
-      { "<leader>e", "<leader>fe", desc = "Explorer NeoTree (root dir)", remap = true },
-      { "<leader>E", "<leader>fE", desc = "Explorer NeoTree (cwd)", remap = true },
+      -- { "<leader>e", "<leader>fe", desc = "Explorer NeoTree (cwd)", remap = true },
+      -- { "<leader>E", "<leader>fE", desc = "Explorer NeoTree (root dir)", remap = true },
       {
         "<leader>ge",
         function()
-          require("neo-tree.command").execute({ source = "git_status", toggle = true })
+          require("neo-tree.command").execute({
+            source = "git_status",
+            toggle = true,
+            position = "current",
+            reveal = true,
+          })
         end,
         desc = "Git explorer",
       },
@@ -55,6 +65,7 @@ return {
         bind_to_cwd = false,
         follow_current_file = { enabled = true },
         use_libuv_file_watcher = true,
+        hijack_netrw_behavior = "disabled",
       },
       window = {
         mappings = {
@@ -139,27 +150,36 @@ return {
           end)
         end,
       },
+      -- {
+      --   "tiagovla/scope.nvim",
+      --   config = function()
+      --     Util.on_load("telescope.nvim", function()
+      --       require("telescope").load_extension("scope")
+      --     end)
+      --   end,
+      -- },
     },
     keys = {
       {
-        "<leader>,",
+        "gbb",
         "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>",
         desc = "Switch Buffer",
       },
       { "<leader>/", LazyVim.telescope("live_grep"), desc = "Grep (root dir)" },
       { "<leader>:", "<cmd>Telescope command_history<cr>", desc = "Command History" },
-      { "<leader><space>", LazyVim.telescope("files"), desc = "Find Files (root dir)" },
+      -- { "<leader><space>", LazyVim.telescope("files"), desc = "Find Files (root dir)" },
       -- find
-      { "<leader>fb", "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>", desc = "Buffers" },
-      { "<leader>fc", LazyVim.telescope.config_files(), desc = "Find Config File" },
-      { "<leader>ff", LazyVim.telescope("files"), desc = "Find Files (root dir)" },
-      { "<leader>fF", LazyVim.telescope("files", { cwd = false }), desc = "Find Files (cwd)" },
-      { "<leader>fg", "<cmd>Telescope git_files<cr>", desc = "Find Files (git-files)" },
-      { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent" },
-      { "<leader>fR", LazyVim.telescope("oldfiles", { cwd = vim.uv.cwd() }), desc = "Recent (cwd)" },
+      { "<leader>ob", "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>", desc = "Buffers" },
+      { "<leader>oc", LazyVim.telescope.config_files(), desc = "Find Config File" },
+      { "<leader>of", LazyVim.telescope("files"), desc = "Find Files (root dir)" },
+      -- { "<leader>oF", LazyVim.telescope("files", { cwd = false }), desc = "Find Files (cwd)" },
+      { "<leader>og", "<cmd>Telescope git_files<cr>", desc = "Find Files (git-files)" },
+      { "<leader>or", "<cmd>Telescope oldfiles<cr>", desc = "Recent" },
+      { "<leader>oR", LazyVim.telescope("oldfiles", { cwd = vim.uv.cwd() }), desc = "Recent (cwd)" },
       -- git
-      { "<leader>gc", "<cmd>Telescope git_commits<CR>", desc = "commits" },
-      { "<leader>gs", "<cmd>Telescope git_status<CR>", desc = "status" },
+      -- { "<leader>gc", "<cmd>Telescope git_commits<CR>", desc = "commits" },
+      { "<leader>os", "<cmd>Telescope git_status<CR>", desc = "status" },
+      { "<leader>ol", LazyVim.telescope("files"), { cwd = "./" .. vim.fn.expand("%:h:.") }, desc = "Find Files (cwd)" },
       -- search
       { '<leader>s"', "<cmd>Telescope registers<cr>", desc = "Registers" },
       { "<leader>sa", "<cmd>Telescope autocommands<cr>", desc = "Auto Commands" },
@@ -182,6 +202,27 @@ return {
       { "<leader>sw", LazyVim.telescope("grep_string"), mode = "v", desc = "Selection (root dir)" },
       { "<leader>sW", LazyVim.telescope("grep_string", { cwd = false }), mode = "v", desc = "Selection (cwd)" },
       { "<leader>uC", LazyVim.telescope("colorscheme", { enable_preview = true }), desc = "Colorscheme with preview" },
+      {
+        "<leader>oo",
+        function()
+          require("telescope.builtin").git_files()
+        end,
+        desc = "Git files (root dir)",
+      },
+      -- {
+      --   "<leader>oe",
+      --   function()
+      --     require("telescope.builtin").find_files({ hidden = true })
+      --   end,
+      --   desc = "Find files (root dir)",
+      -- },
+      -- {
+      --   "<leader>oF",
+      --   function()
+      --     require("telescope.builtin").find_files({ cwd = vim.loop.cwd() })
+      --   end,
+      --   desc = "Find files (cwd dir)",
+      -- },
       {
         "<leader>ss",
         function()
@@ -223,6 +264,9 @@ return {
 
       return {
         defaults = {
+          -- layout_strategy = "vertical",
+          file_sorter = require("telescope.sorters").get_fzy_sorter,
+          generic_sorter = require("telescope.sorters").get_fzy_sorter,
           prompt_prefix = " ",
           selection_caret = " ",
           -- open files in the first window that is an actual file.
@@ -240,8 +284,8 @@ return {
           end,
           mappings = {
             i = {
-              ["<c-t>"] = open_with_trouble,
-              ["<a-t>"] = open_selected_with_trouble,
+              ["<a-t>"] = open_with_trouble,
+              ["<a-s>"] = open_selected_with_trouble,
               ["<a-i>"] = find_files_no_ignore,
               ["<a-h>"] = find_files_with_hidden,
               ["<C-Down>"] = actions.cycle_history_next,
@@ -252,6 +296,50 @@ return {
             n = {
               ["q"] = actions.close,
             },
+          },
+        },
+        pickers = {
+          find_files = {
+            theme = "ivy",
+          },
+          git_files = {
+            theme = "ivy",
+          },
+          buffers = {
+            theme = "ivy",
+          },
+          lsp_document_symbols = {
+            theme = "ivy",
+          },
+          marks = {
+            theme = "ivy",
+          },
+          diagnostics = {
+            theme = "ivy",
+          },
+          commands = {
+            theme = "ivy",
+          },
+          command_history = {
+            theme = "ivy",
+          },
+          registers = {
+            theme = "ivy",
+          },
+          lsp_references = {
+            theme = "ivy",
+          },
+          lsp_workspace_symbols = {
+            theme = "ivy",
+          },
+          lsp_type_definitions = {
+            theme = "ivy",
+          },
+          lsp_definitions = {
+            theme = "ivy",
+          },
+          lsp_implementations = {
+            theme = "ivy",
           },
         },
       }
@@ -319,7 +407,7 @@ return {
       defaults = {
         mode = { "n", "v" },
         ["g"] = { name = "+goto" },
-        ["gs"] = { name = "+surround" },
+        -- ["gs"] = { name = "+surround" },
         ["z"] = { name = "+fold" },
         ["]"] = { name = "+next" },
         ["["] = { name = "+prev" },
@@ -334,6 +422,9 @@ return {
         ["<leader>u"] = { name = "+ui" },
         ["<leader>w"] = { name = "+windows" },
         ["<leader>x"] = { name = "+diagnostics/quickfix" },
+      },
+      triggers_blacklist = {
+        n = { "<c-w>" },
       },
     },
     config = function(_, opts)
@@ -361,23 +452,50 @@ return {
       on_attach = function(buffer)
         local gs = package.loaded.gitsigns
 
+        local function altmap(mode, l, r, opts)
+          opts = opts or {}
+          opts.buffer = buffer
+          vim.keymap.set(mode, l, r, opts)
+        end
+
         local function map(mode, l, r, desc)
           vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
         end
 
+        altmap("n", "]c", function()
+          if vim.wo.diff then
+            return "]c"
+          end
+          vim.schedule(function()
+            gs.next_hunk()
+          end)
+          return "<Ignore>"
+        end, { expr = true })
+
+        altmap("n", "[c", function()
+          if vim.wo.diff then
+            return "[c"
+          end
+          vim.schedule(function()
+            gs.prev_hunk()
+          end)
+          return "<Ignore>"
+        end, { expr = true })
+
         -- stylua: ignore start
-        map("n", "]h", gs.next_hunk, "Next Hunk")
-        map("n", "[h", gs.prev_hunk, "Prev Hunk")
-        map({ "n", "v" }, "<leader>ghs", ":Gitsigns stage_hunk<CR>", "Stage Hunk")
-        map({ "n", "v" }, "<leader>ghr", ":Gitsigns reset_hunk<CR>", "Reset Hunk")
-        map("n", "<leader>ghS", gs.stage_buffer, "Stage Buffer")
-        map("n", "<leader>ghu", gs.undo_stage_hunk, "Undo Stage Hunk")
-        map("n", "<leader>ghR", gs.reset_buffer, "Reset Buffer")
-        map("n", "<leader>ghp", gs.preview_hunk_inline, "Preview Hunk Inline")
-        map("n", "<leader>ghb", function() gs.blame_line({ full = true }) end, "Blame Line")
-        map("n", "<leader>ghd", gs.diffthis, "Diff This")
-        map("n", "<leader>ghD", function() gs.diffthis("~") end, "Diff This ~")
-        map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
+        -- map("n", "]c", gs.next_hunk, "Next Hunk") -- defined above
+        -- map("n", "[c", gs.prev_hunk, "Prev Hunk") -- defined above
+        map({ "n", "v" }, "ghs", ":Gitsigns stage_hunk<CR>", "Stage Hunk")
+        map({ "n", "v" }, "ghr", ":Gitsigns reset_hunk<CR>", "Reset Hunk")
+        map("n", "ghS", gs.stage_buffer, "Stage Buffer")
+        map("n", "ghu", gs.undo_stage_hunk, "Undo Stage Hunk")
+        map("n", "ghR", gs.reset_buffer, "Reset Buffer")
+        map("n", "ghp", gs.preview_hunk_inline, "Preview Hunk Inline")
+        map("n", "ghb", function() gs.blame_line({ full = true }) end, "Blame Line")
+        map("n", "ghd", gs.diffthis, "Diff This")
+        map("n", "ghD", function() gs.diffthis("~") end, "Diff This ~")
+        map({ "o", "x" }, "ic", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
+        map({ "o", "x" }, "ac", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
       end,
     },
   },
@@ -394,6 +512,7 @@ return {
       large_file_overrides = {
         providers = { "lsp" },
       },
+      under_cursor = false,
     },
     config = function(_, opts)
       require("illuminate").configure(opts)
@@ -425,10 +544,9 @@ return {
   -- buffer remove
   {
     "echasnovski/mini.bufremove",
-
     keys = {
       {
-        "<leader>bd",
+        "Q",
         function()
           local bd = require("mini.bufremove").delete
           if vim.bo.modified then
@@ -442,11 +560,21 @@ return {
           else
             bd(0)
           end
+          vim.cmd.close()
         end,
         desc = "Delete Buffer",
       },
       -- stylua: ignore
-      { "<leader>bD", function() require("mini.bufremove").delete(0, true) end, desc = "Delete Buffer (Force)" },
+      { "<leader>bd", function() require("mini.bufremove").delete(0, true) end, desc = "Delete Buffer (Force)" },
+      {
+        "gbr",
+        function()
+          local bufname = vim.fn.bufname()
+          require("mini.bufremove").wipeout(0, true)
+          vim.cmd("e " .. bufname)
+        end,
+        desc = "Reload Buffer (Force)",
+      },
     },
   },
 

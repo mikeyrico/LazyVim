@@ -58,7 +58,7 @@ vim.api.nvim_create_autocmd("FileType", {
     "help",
     "lspinfo",
     "notify",
-    "qf",
+    -- "qf", -- disable quickfix mapping
     "query",
     "spectre_panel",
     "startuptime",

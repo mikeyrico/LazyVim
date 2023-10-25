@@ -58,6 +58,7 @@ return {
         "c",
         "diff",
         "html",
+        "http", -- add this for rest.nvim
         "javascript",
         "jsdoc",
         "json",
@@ -90,10 +91,10 @@ return {
       textobjects = {
         move = {
           enable = true,
-          goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer" },
-          goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer" },
-          goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer" },
-          goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer" },
+          goto_next_start = { ["]F"] = "@function.outer", ["]C"] = "@class.outer" },
+          -- goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer" },
+          goto_previous_start = { ["[F"] = "@function.outer", ["[C"] = "@class.outer" },
+          -- goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer" },
         },
       },
     },

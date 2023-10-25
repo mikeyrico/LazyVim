@@ -173,9 +173,9 @@ return {
               ["<leader>cx"] = { name = "+extract" },
               ["<leader>cxv"] = { require("jdtls").extract_variable_all, "Extract Variable" },
               ["<leader>cxc"] = { require("jdtls").extract_constant, "Extract Constant" },
-              ["gs"] = { require("jdtls").super_implementation, "Goto Super" },
-              ["gS"] = { require("jdtls.tests").goto_subjects, "Goto Subjects" },
-              ["<leader>co"] = { require("jdtls").organize_imports, "Organize Imports" },
+              ["grs"] = { require("jdtls").super_implementation, "Goto Super" },
+              ["grS"] = { require("jdtls.tests").goto_subjects, "Goto Subjects" },
+              ["<leader>cO"] = { require("jdtls").organize_imports, "Organize Imports" },
             }, { mode = "n", buffer = args.buf })
             wk.register({
               ["<leader>c"] = { name = "+code" },

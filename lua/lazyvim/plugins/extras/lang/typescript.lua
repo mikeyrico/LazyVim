@@ -20,7 +20,7 @@ return {
         tsserver = {
           keys = {
             {
-              "<leader>co",
+              "<leader>cO",
               function()
                 vim.lsp.buf.code_action({
                   apply = true,
