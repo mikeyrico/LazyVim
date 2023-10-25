@@ -65,7 +65,7 @@ vim.api.nvim_create_autocmd("FileType", {
     "neotest-output-panel",
     "neotest-summary",
     "notify",
-    "qf",
+    -- "qf",
     "snacks_win",
     "spectre_panel",
     "startuptime",
