@@ -59,15 +59,15 @@ return {
     "akinsho/bufferline.nvim",
     event = "VeryLazy",
     keys = {
-      { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle pin" },
-      { "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete non-pinned buffers" },
-      { "<leader>bo", "<Cmd>BufferLineCloseOthers<CR>", desc = "Delete other buffers" },
-      { "<leader>br", "<Cmd>BufferLineCloseRight<CR>", desc = "Delete buffers to the right" },
-      { "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>", desc = "Delete buffers to the left" },
-      { "<S-h>", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev buffer" },
-      { "<S-l>", "<cmd>BufferLineCycleNext<cr>", desc = "Next buffer" },
-      { "[b", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev buffer" },
-      { "]b", "<cmd>BufferLineCycleNext<cr>", desc = "Next buffer" },
+      -- { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle pin" },
+      -- { "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete non-pinned buffers" },
+      -- { "<leader>bo", "<Cmd>BufferLineCloseOthers<CR>", desc = "Delete other buffers" },
+      -- { "<leader>br", "<Cmd>BufferLineCloseRight<CR>", desc = "Delete buffers to the right" },
+      -- { "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>", desc = "Delete buffers to the left" },
+      -- { "<S-h>", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev buffer" },
+      -- { "<S-l>", "<cmd>BufferLineCycleNext<cr>", desc = "Next buffer" },
+      -- { "[b", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev buffer" },
+      -- { "]b", "<cmd>BufferLineCycleNext<cr>", desc = "Next buffer" },
     },
     opts = {
       options = {
@@ -76,7 +76,7 @@ return {
         -- stylua: ignore
         right_mouse_command = function(n) require("mini.bufremove").delete(n, false) end,
         diagnostics = "nvim_lsp",
-        always_show_bufferline = false,
+        always_show_bufferline = true,
         diagnostics_indicator = function(_, _, diag)
           local icons = require("lazyvim.config").icons.diagnostics
           local ret = (diag.error and icons.Error .. diag.error .. " " or "")
@@ -289,6 +289,9 @@ return {
     "folke/noice.nvim",
     event = "VeryLazy",
     opts = {
+      cmdline = {
+        view = "cmdline",
+      },
       lsp = {
         override = {
           ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
@@ -311,7 +314,7 @@ return {
       },
       presets = {
         bottom_search = true,
-        command_palette = true,
+        -- command_palette = true,
         long_message_to_split = true,
         inc_rename = true,
       },
@@ -362,6 +365,21 @@ return {
 
       logo = string.rep("\n", 8) .. logo .. "\n\n"
 
+      local sharp = [[
+	                                                                     
+	       ████ ██████           █████      ██                     
+	      ███████████             █████                             
+	      █████████ ███████████████████ ███   ███████████   
+	     █████████  ███    █████████████ █████ ██████████████   
+	    █████████ ██████████ █████████ █████ █████ ████ █████   
+	  ███████████ ███    ███ █████████ █████ █████ ████ █████  
+	 ██████  █████████████████████ ████ █████ █████ ████ ██████ 
+      ]]
+      sharp = string.rep("\n", 8) .. sharp .. "\n\n"
+
+      local cwd = vim.fn.getcwd()
+      local dirname = require("telescope.utils").path_tail(cwd)
+
       local opts = {
         theme = "doom",
         hide = {
@@ -370,18 +388,18 @@ return {
           statusline = false,
         },
         config = {
-          header = vim.split(logo, "\n"),
+          header = vim.split(sharp, "\n"),
           -- stylua: ignore
           center = {
-            { action = Util.telescope("files"),                                    desc = " Find file",       icon = " ", key = "f" },
+            { action = Util.telescope("files"),                                    desc = " " .. dirname,     icon = " ", key = "f" },
             { action = "ene | startinsert",                                        desc = " New file",        icon = " ", key = "n" },
             { action = "Telescope oldfiles",                                       desc = " Recent files",    icon = " ", key = "r" },
-            { action = "Telescope live_grep",                                      desc = " Find text",       icon = " ", key = "g" },
+            { action = "Telescope live_grep",                                      desc = " Find text",       icon = " ", key = "G" },
             { action = [[lua require("lazyvim.util").telescope.config_files()()]], desc = " Config",          icon = " ", key = "c" },
             { action = 'lua require("persistence").load()',                        desc = " Restore Session", icon = " ", key = "s" },
             { action = "LazyExtras",                                               desc = " Lazy Extras",     icon = " ", key = "x" },
             { action = "Lazy",                                                     desc = " Lazy",            icon = "󰒲 ", key = "l" },
-            { action = "qa",                                                       desc = " Quit",            icon = " ", key = "q" },
+            { action = "qa",                                                       desc = " Quit",            icon = " ", key = "Q" },
           },
           footer = function()
             local stats = require("lazy").stats()

@@ -14,7 +14,7 @@ function M.get()
     -- stylua: ignore
     M._keys =  {
       { "<leader>cl", "<cmd>LspInfo<cr>", desc = "Lsp Info" },
-      { "gd", function() require("telescope.builtin").lsp_definitions({ reuse_win = true }) end, desc = "Goto Definition", has = "definition" },
+      { "gd", function() require("telescope.builtin").lsp_definitions({ reuse_win = true, layout_strategy = "horizontal" }) end, desc = "Goto Definition", has = "definition" },
       { "gr", "<cmd>Telescope lsp_references<cr>", desc = "References" },
       { "gD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
       { "gI", function() require("telescope.builtin").lsp_implementations({ reuse_win = true }) end, desc = "Goto Implementation" },
@@ -43,7 +43,7 @@ function M.get()
     }
   if require("lazyvim.util").has("inc-rename.nvim") then
     M._keys[#M._keys + 1] = {
-      "<leader>cr",
+      "<leader>cn",
       function()
         local inc_rename = require("inc_rename")
         return ":" .. inc_rename.config.cmd_name .. " " .. vim.fn.expand("<cword>")
@@ -53,7 +53,7 @@ function M.get()
       has = "rename",
     }
   else
-    M._keys[#M._keys + 1] = { "<leader>cr", vim.lsp.buf.rename, desc = "Rename", has = "rename" }
+    M._keys[#M._keys + 1] = { "<leader>cn", vim.lsp.buf.rename, desc = "Rename", has = "rename" }
   end
   return M._keys
 end
