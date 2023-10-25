@@ -26,8 +26,8 @@ return {
     { "P", "<Plug>(YankyPutBefore)", mode = { "n", "x" }, desc = "Put Text Before Cursor" },
     { "gp", "<Plug>(YankyGPutAfter)", mode = { "n", "x" }, desc = "Put Text After Selection" },
     { "gP", "<Plug>(YankyGPutBefore)", mode = { "n", "x" }, desc = "Put Text Before Selection" },
-    { "[y", "<Plug>(YankyCycleForward)", desc = "Cycle Forward Through Yank History" },
-    { "]y", "<Plug>(YankyCycleBackward)", desc = "Cycle Backward Through Yank History" },
+    { "<c-n>", "<Plug>(YankyCycleForward)", desc = "Cycle Forward Through Yank History" },
+    { "<c-p>", "<Plug>(YankyCycleBackward)", desc = "Cycle Backward Through Yank History" },
     { "]p", "<Plug>(YankyPutIndentAfterLinewise)", desc = "Put Indented After Cursor (Linewise)" },
     { "[p", "<Plug>(YankyPutIndentBeforeLinewise)", desc = "Put Indented Before Cursor (Linewise)" },
     { "]P", "<Plug>(YankyPutIndentAfterLinewise)", desc = "Put Indented After Cursor (Linewise)" },
@@ -38,5 +38,12 @@ return {
     { "<P", "<Plug>(YankyPutIndentBeforeShiftLeft)", desc = "Put Before and Indent Left" },
     { "=p", "<Plug>(YankyPutAfterFilter)", desc = "Put After Applying a Filter" },
     { "=P", "<Plug>(YankyPutBeforeFilter)", desc = "Put Before Applying a Filter" },
+    {
+      "<leader>oy",
+      function()
+        require("telescope").extensions.yank_history.yank_history({})
+      end,
+      desc = "Open Yank History",
+    },
   },
 }

@@ -6,25 +6,35 @@ return {
     cmd = "Neotree",
     keys = {
       {
-        "<leader>fe",
+        "<leader>fE",
         function()
           require("neo-tree.command").execute({ toggle = true, dir = LazyVim.root() })
         end,
         desc = "Explorer NeoTree (Root Dir)",
       },
       {
-        "<leader>fE",
+        "<leader>fe",
         function()
-          require("neo-tree.command").execute({ toggle = true, dir = vim.uv.cwd() })
+          require("neo-tree.command").execute({
+            toggle = true,
+            dir = vim.uv.cwd(),
+            position = "current",
+            reveal = true,
+          })
         end,
         desc = "Explorer NeoTree (cwd)",
       },
-      { "<leader>e", "<leader>fe", desc = "Explorer NeoTree (Root Dir)", remap = true },
-      { "<leader>E", "<leader>fE", desc = "Explorer NeoTree (cwd)", remap = true },
+      -- { "<leader>e", "<leader>fe", desc = "Explorer NeoTree (Root Dir)", remap = true },
+      -- { "<leader>E", "<leader>fE", desc = "Explorer NeoTree (cwd)", remap = true },
       {
         "<leader>ge",
         function()
-          require("neo-tree.command").execute({ source = "git_status", toggle = true })
+          require("neo-tree.command").execute({
+            source = "git_status",
+            toggle = true,
+            position = "current",
+            reveal = true,
+          })
         end,
         desc = "Git Explorer",
       },
@@ -65,6 +75,7 @@ return {
         bind_to_cwd = false,
         follow_current_file = { enabled = true },
         use_libuv_file_watcher = true,
+        hijack_netrw_behavior = "disabled",
       },
       window = {
         mappings = {
@@ -192,7 +203,7 @@ return {
           { "[", group = "prev" },
           { "]", group = "next" },
           { "g", group = "goto" },
-          { "gs", group = "surround" },
+          -- { "gs", group = "surround" },
           { "z", group = "fold" },
           {
             "<leader>b",
@@ -228,6 +239,9 @@ return {
           require("which-key").show({ keys = "<c-w>", loop = true })
         end,
         desc = "Window Hydra Mode (which-key)",
+      },
+      triggers_blacklist = {
+        n = { "<c-w>" },
       },
     },
     config = function(_, opts)
@@ -265,9 +279,35 @@ return {
       on_attach = function(buffer)
         local gs = package.loaded.gitsigns
 
+        local function altmap(mode, l, r, opts)
+          opts = opts or {}
+          opts.buffer = buffer
+          vim.keymap.set(mode, l, r, opts)
+        end
+
         local function map(mode, l, r, desc)
           vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
         end
+
+        altmap("n", "]c", function()
+          if vim.wo.diff then
+            return "]c"
+          end
+          vim.schedule(function()
+            gs.nav_hunk("next")
+          end)
+          return "<Ignore>"
+        end, { expr = true })
+
+        altmap("n", "[c", function()
+          if vim.wo.diff then
+            return "[c"
+          end
+          vim.schedule(function()
+            gs.nav_hunk("prev")
+          end)
+          return "<Ignore>"
+        end, { expr = true })
 
         -- stylua: ignore start
         map("n", "]h", function()
@@ -297,6 +337,7 @@ return {
         map("n", "<leader>ghd", gs.diffthis, "Diff This")
         map("n", "<leader>ghD", function() gs.diffthis("~") end, "Diff This ~")
         map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
+        map({ "o", "x" }, "ic", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk") -- for use with ]c
       end,
     },
   },

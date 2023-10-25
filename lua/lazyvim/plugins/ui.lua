@@ -59,7 +59,7 @@ return {
         -- stylua: ignore
         right_mouse_command = function(n) LazyVim.ui.bufremove(n) end,
         diagnostics = "nvim_lsp",
-        always_show_bufferline = false,
+        always_show_bufferline = true,
         diagnostics_indicator = function(_, _, diag)
           local icons = LazyVim.config.icons.diagnostics
           local ret = (diag.error and icons.Error .. diag.error .. " " or "")
@@ -267,6 +267,9 @@ return {
     "folke/noice.nvim",
     event = "VeryLazy",
     opts = {
+      cmdline = {
+        view = "cmdline",
+      },
       lsp = {
         override = {
           ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
@@ -289,7 +292,7 @@ return {
       },
       presets = {
         bottom_search = true,
-        command_palette = true,
+        -- command_palette = true,
         long_message_to_split = true,
       },
     },
@@ -355,6 +358,22 @@ return {
 
       logo = string.rep("\n", 8) .. logo .. "\n\n"
 
+      local sharp = [[
+	                                                                     
+	       ████ ██████           █████      ██                     
+	      ███████████             █████                             
+	      █████████ ███████████████████ ███   ███████████   
+	     █████████  ███    █████████████ █████ ██████████████   
+	    █████████ ██████████ █████████ █████ █████ ████ █████   
+	  ███████████ ███    ███ █████████ █████ █████ ████ █████  
+	 ██████  █████████████████████ ████ █████ █████ ████ ██████ 
+      ]]
+      sharp = string.rep("\n", 8) .. sharp .. "\n\n"
+
+      local cwd = vim.fn.getcwd()
+      local dirname = require("telescope.utils").path_tail(cwd)
+      local termAction = 'split | lua require("harpoon.term").gotoTerminal(1)'
+
       local opts = {
         theme = "doom",
         hide = {
@@ -363,10 +382,10 @@ return {
           statusline = false,
         },
         config = {
-          header = vim.split(logo, "\n"),
+          header = vim.split(sharp, "\n"),
           -- stylua: ignore
           center = {
-            { action = 'lua LazyVim.pick()()',                           desc = " Find File",       icon = " ", key = "f" },
+            { action = 'lua LazyVim.pick()()',                           desc = " " .. dirname,     icon = " ", key = "f" },
             { action = "ene | startinsert",                              desc = " New File",        icon = " ", key = "n" },
             { action = 'lua LazyVim.pick("oldfiles")()',                 desc = " Recent Files",    icon = " ", key = "r" },
             { action = 'lua LazyVim.pick("live_grep")()',                desc = " Find Text",       icon = " ", key = "g" },
@@ -375,6 +394,7 @@ return {
             { action = "LazyExtras",                                     desc = " Lazy Extras",     icon = " ", key = "x" },
             { action = "Lazy",                                           desc = " Lazy",            icon = "󰒲 ", key = "l" },
             { action = function() vim.api.nvim_input("<cmd>qa<cr>") end, desc = " Quit",            icon = " ", key = "q" },
+            { action = termAction,                                       desc = " Terminal",        icon = " ", key = "t" },
           },
           footer = function()
             local stats = require("lazy").stats()
