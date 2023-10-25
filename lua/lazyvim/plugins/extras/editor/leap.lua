@@ -21,17 +21,24 @@ return {
     enabled = true,
     keys = {
       { "s", mode = { "n", "x", "o" }, desc = "Leap Forward to" },
-      { "S", mode = { "n", "x", "o" }, desc = "Leap Backward to" },
-      { "gs", mode = { "n", "x", "o" }, desc = "Leap from Windows" },
+      { "S", mode = { "n", "o" }, desc = "Leap Backward to" },
+      { "gw", mode = { "n", "x", "o" }, desc = "Leap from Windows" },
+      { "x", mode = { "n", "x", "o" }, desc = "Leap Forward Till" },
+      { "X", mode = { "n", "x", "o" }, desc = "Leap Backward Till" },
     },
     config = function(_, opts)
       local leap = require("leap")
       for k, v in pairs(opts) do
         leap.opts[k] = v
       end
-      leap.add_default_mappings(true)
-      vim.keymap.del({ "x", "o" }, "x")
-      vim.keymap.del({ "x", "o" }, "X")
+      -- leap.add_default_mappings(true)
+      vim.keymap.set({ "n", "x", "o" }, "s", "<Plug>(leap-forward-to)")
+      vim.keymap.set({ "n", "o" }, "S", "<Plug>(leap-backward-to)") -- exclude 'x' for surround
+      vim.keymap.set({ "n", "x", "o" }, "x", "<Plug>(leap-forward-till)")
+      vim.keymap.set({ "n", "x", "o" }, "X", "<Plug>(leap-backward-till)")
+      vim.keymap.set({ "n", "x", "o" }, "gw", "<Plug>(leap-from-window)") -- vim.keymap.del({ "n", "x", "o" }, "gs") -- do not enable this, it overwrites grepper
+      -- vim.keymap.del({ "x", "o" }, "x")
+      -- vim.keymap.del({ "x", "o" }, "X")
     end,
   },
 

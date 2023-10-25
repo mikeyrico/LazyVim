@@ -86,7 +86,7 @@ return {
     },
     keys = {
       {
-        "<leader>,",
+        "gbb",
         "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>",
         desc = "Switch Buffer",
       },
@@ -94,15 +94,15 @@ return {
       { "<leader>:", "<cmd>Telescope command_history<cr>", desc = "Command History" },
       { "<leader><space>", LazyVim.pick("files"), desc = "Find Files (Root Dir)" },
       -- find
-      { "<leader>fb", "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>", desc = "Buffers" },
-      { "<leader>fc", LazyVim.pick.config_files(), desc = "Find Config File" },
-      { "<leader>ff", LazyVim.pick("files"), desc = "Find Files (Root Dir)" },
-      { "<leader>fF", LazyVim.pick("files", { root = false }), desc = "Find Files (cwd)" },
-      { "<leader>fg", "<cmd>Telescope git_files<cr>", desc = "Find Files (git-files)" },
-      { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent" },
-      { "<leader>fR", LazyVim.pick("oldfiles", { cwd = vim.uv.cwd() }), desc = "Recent (cwd)" },
+      { "<leader>ob", "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>", desc = "Buffers" },
+      { "<leader>oc", LazyVim.pick.config_files(), desc = "Find Config File" },
+      { "<leader>of", LazyVim.pick("files"), desc = "Find Files (Root Dir)" },
+      -- { "<leader>oF", LazyVim.pick("files", { root = false }), desc = "Find Files (cwd)" },
+      { "<leader>og", "<cmd>Telescope git_files<cr>", desc = "Find Files (git-files)" },
+      { "<leader>or", "<cmd>Telescope oldfiles<cr>", desc = "Recent" },
+      { "<leader>oR", LazyVim.pick("oldfiles", { cwd = vim.uv.cwd() }), desc = "Recent (cwd)" },
       -- git
-      { "<leader>gc", "<cmd>Telescope git_commits<CR>", desc = "Commits" },
+      -- { "<leader>gc", "<cmd>Telescope git_commits<CR>", desc = "Commits" },
       { "<leader>gs", "<cmd>Telescope git_status<CR>", desc = "Status" },
       -- search
       { '<leader>s"', "<cmd>Telescope registers<cr>", desc = "Registers" },
@@ -129,6 +129,13 @@ return {
       { "<leader>sw", LazyVim.pick("grep_string"), mode = "v", desc = "Selection (Root Dir)" },
       { "<leader>sW", LazyVim.pick("grep_string", { root = false }), mode = "v", desc = "Selection (cwd)" },
       { "<leader>uC", LazyVim.pick("colorscheme", { enable_preview = true }), desc = "Colorscheme with Preview" },
+      {
+        "<leader>oo",
+        function()
+          require("telescope.builtin").git_files()
+        end,
+        desc = "Git files (root dir)",
+      },
       {
         "<leader>ss",
         function()
@@ -181,6 +188,9 @@ return {
 
       return {
         defaults = {
+          -- layout_strategy = "vertical",
+          file_sorter = require("telescope.sorters").get_fzy_sorter,
+          generic_sorter = require("telescope.sorters").get_fzy_sorter,
           prompt_prefix = " ",
           selection_caret = " ",
           -- open files in the first window that is an actual file.
@@ -198,7 +208,7 @@ return {
           end,
           mappings = {
             i = {
-              ["<c-t>"] = open_with_trouble,
+              ["<a-s>"] = open_with_trouble,
               ["<a-t>"] = open_with_trouble,
               ["<a-i>"] = find_files_no_ignore,
               ["<a-h>"] = find_files_with_hidden,
@@ -216,6 +226,46 @@ return {
           find_files = {
             find_command = find_command,
             hidden = true,
+            theme = "ivy",
+          },
+          git_files = {
+            theme = "ivy",
+          },
+          buffers = {
+            theme = "ivy",
+          },
+          lsp_document_symbols = {
+            theme = "ivy",
+          },
+          marks = {
+            theme = "ivy",
+          },
+          diagnostics = {
+            theme = "ivy",
+          },
+          commands = {
+            theme = "ivy",
+          },
+          command_history = {
+            theme = "ivy",
+          },
+          registers = {
+            theme = "ivy",
+          },
+          lsp_references = {
+            theme = "ivy",
+          },
+          lsp_workspace_symbols = {
+            theme = "ivy",
+          },
+          lsp_type_definitions = {
+            theme = "ivy",
+          },
+          lsp_definitions = {
+            theme = "ivy",
+          },
+          lsp_implementations = {
+            theme = "ivy",
           },
         },
       }

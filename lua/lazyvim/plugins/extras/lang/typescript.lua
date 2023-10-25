@@ -89,7 +89,7 @@ return {
               desc = "File References",
             },
             {
-              "<leader>co",
+              "<leader>cO",
               LazyVim.lsp.action["source.organizeImports"],
               desc = "Organize Imports",
             },
