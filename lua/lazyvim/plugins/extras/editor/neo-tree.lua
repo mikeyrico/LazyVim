@@ -6,25 +6,30 @@ return {
     cmd = "Neotree",
     keys = {
       {
-        "<leader>fe",
+        "<leader>fE",
         function()
           require("neo-tree.command").execute({ toggle = true, dir = LazyVim.root() })
         end,
         desc = "Explorer NeoTree (Root Dir)",
       },
       {
-        "<leader>fE",
+        "<leader>fe",
         function()
-          require("neo-tree.command").execute({ toggle = true, dir = vim.uv.cwd() })
+          require("neo-tree.command").execute({ toggle = true, dir = vim.uv.cwd(), position = "current", reveal = true })
         end,
         desc = "Explorer NeoTree (cwd)",
       },
-      { "<leader>e", "<leader>fe", desc = "Explorer NeoTree (Root Dir)", remap = true },
-      { "<leader>E", "<leader>fE", desc = "Explorer NeoTree (cwd)", remap = true },
+      -- { "<leader>e", "<leader>fe", desc = "Explorer NeoTree (Root Dir)", remap = true },
+      -- { "<leader>E", "<leader>fE", desc = "Explorer NeoTree (cwd)", remap = true },
       {
         "<leader>ge",
         function()
-          require("neo-tree.command").execute({ source = "git_status", toggle = true })
+          require("neo-tree.command").execute({
+            source = "git_status",
+            toggle = true,
+            position = "current",
+            reveal = true,
+          })
         end,
         desc = "Git Explorer",
       },
@@ -65,6 +70,7 @@ return {
         bind_to_cwd = false,
         follow_current_file = { enabled = true },
         use_libuv_file_watcher = true,
+        hijack_netrw_behavior = "disabled",
       },
       window = {
         mappings = {

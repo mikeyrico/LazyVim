@@ -85,7 +85,13 @@ return {
     dependencies = { "folke/which-key.nvim" },
     ft = java_filetypes,
     opts = function()
-      local cmd = { vim.fn.exepath("jdtls") }
+      -- Fixes path not defined when starting up
+      local exe_path = vim.fn.exepath("jdtls")
+      local exe_mason = vim.fn.expand("~/.local/share/nvim/mason/bin/jdtls")
+      local exe = exe_path == "" and exe_mason or exe_path
+      local cmd = { exe }
+
+      -- local cmd = { vim.fn.exepath("jdtls") }
       if LazyVim.has("mason.nvim") then
         local lombok_jar = vim.fn.expand("$MASON/share/jdtls/lombok.jar")
         table.insert(cmd, string.format("--jvm-arg=-javaagent:%s", lombok_jar))
@@ -204,7 +210,7 @@ return {
                 { "<leader>cxc", require("jdtls").extract_constant, desc = "Extract Constant" },
                 { "<leader>cgs", require("jdtls").super_implementation, desc = "Goto Super" },
                 { "<leader>cgS", require("jdtls.tests").goto_subjects, desc = "Goto Subjects" },
-                { "<leader>co", require("jdtls").organize_imports, desc = "Organize Imports" },
+                { "<leader>ci", require("jdtls").organize_imports, desc = "Organize Imports" },
               },
             })
             wk.add({

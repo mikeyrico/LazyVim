@@ -16,6 +16,12 @@ return {
         window = {
           width = 0.4,
         },
+        mappings = {
+          reset = {
+            normal = "<c-v><c-l>",
+            insert = "<c-v><c-l>",
+          },
+        },
       }
     end,
     keys = {

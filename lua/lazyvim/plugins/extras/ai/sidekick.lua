@@ -57,7 +57,7 @@ return {
 
   {
     "folke/sidekick.nvim",
-    opts = function()
+    opts = function(_, opts)
       -- Accept inline suggestions or next edits
       LazyVim.cmp.actions.ai_nes = function()
         local Nes = require("sidekick.nes")
@@ -74,6 +74,17 @@ return {
           require("sidekick.nes").enable(state)
         end,
       }):map("<leader>uN")
+      opts.cli = {
+        mux = {
+          backend = "tmux",
+          enabled = true,
+          create = "split",
+          split = {
+            vertical = true, -- vertical or horizontal split
+            size = 0.34, -- size of the split (0-1 for percentage)
+          },
+        },
+      }
     end,
     -- stylua: ignore
     keys = {

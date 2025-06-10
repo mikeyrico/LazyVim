@@ -140,6 +140,9 @@ return {
           })
         end,
         winopts = {
+          -- width = 1,
+          -- height = 0.36,
+          -- row = 1,
           width = 0.8,
           height = 0.8,
           row = 0.5,
@@ -152,13 +155,13 @@ return {
           cwd_prompt = false,
           actions = {
             ["alt-i"] = { actions.toggle_ignore },
-            ["alt-h"] = { actions.toggle_hidden },
+            ["alt-."] = { actions.toggle_hidden },
           },
         },
         grep = {
           actions = {
             ["alt-i"] = { actions.toggle_ignore },
-            ["alt-h"] = { actions.toggle_hidden },
+            ["alt-."] = { actions.toggle_hidden },
           },
         },
         lsp = {
@@ -220,8 +223,16 @@ return {
       { "<leader>fb", "<cmd>FzfLua buffers sort_mru=true sort_lastused=true<cr>", desc = "Buffers" },
       { "<leader>fB", "<cmd>FzfLua buffers<cr>", desc = "Buffers (all)" },
       { "<leader>fc", LazyVim.pick.config_files(), desc = "Find Config File" },
-      { "<leader>ff", LazyVim.pick("files"), desc = "Find Files (Root Dir)" },
-      { "<leader>fF", LazyVim.pick("files", { root = false }), desc = "Find Files (cwd)" },
+      {
+        "<leader>fF",
+        LazyVim.pick("files", { winopts = { row = 1, width = 1, height = 0.36 } }),
+        desc = "Find Files (Root Dir)",
+      },
+      {
+        "<leader>ff",
+        LazyVim.pick("files", { root = false, winopts = { row = 1, width = 1, height = 0.36 } }),
+        desc = "Find Files (cwd)",
+      },
       { "<leader>fg", "<cmd>FzfLua git_files<cr>", desc = "Find Files (git-files)" },
       { "<leader>fr", "<cmd>FzfLua oldfiles<cr>", desc = "Recent" },
       { "<leader>fR", LazyVim.pick("oldfiles", { cwd = vim.uv.cwd() }), desc = "Recent (cwd)" },

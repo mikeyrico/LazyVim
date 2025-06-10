@@ -14,12 +14,16 @@ return {
       "OverseerClose",
       "OverseerToggle",
       "OverseerRun",
+      "OverseerShell",
       "OverseerTaskAction",
     },
     opts = {
       dap = false,
       task_list = {
         keymaps = {
+          ["<C-u>"] = "keymap.scroll_output_up",
+          ["<C-d>"] = "keymap.scroll_output_down",
+          ["<C-h>"] = false,
           ["<C-j>"] = false,
           ["<C-k>"] = false,
         },
@@ -40,6 +44,7 @@ return {
       { "<leader>ow", "<cmd>OverseerToggle!<cr>",    desc = "Task list" },
       { "<leader>oo", "<cmd>OverseerRun<cr>",        desc = "Run task" },
       { "<leader>ot", "<cmd>OverseerTaskAction<cr>", desc = "Task action" },
+      { "<leader>os", "<cmd>OverseerShell<cr>",       desc = "Overseer Shell" },
     },
   },
   {

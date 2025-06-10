@@ -35,6 +35,7 @@ return {
         "c",
         "diff",
         "html",
+        "http", -- add this for rest.nvim
         "javascript",
         "jsdoc",
         "json",
@@ -146,10 +147,10 @@ return {
         set_jumps = true, -- whether to set jumps in the jumplist
         -- LazyVim extention to create buffer-local keymaps
         keys = {
-          goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer", ["]a"] = "@parameter.inner" },
-          goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer", ["]A"] = "@parameter.inner" },
-          goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer", ["[a"] = "@parameter.inner" },
-          goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer", ["[A"] = "@parameter.inner" },
+          goto_next_start = { ["]d"] = "@function.outer", ["]h"] = "@class.outer", ["]r"] = "@parameter.inner" },
+          goto_next_end = { ["]D"] = "@function.outer", ["]H"] = "@class.outer", ["]R"] = "@parameter.inner" },
+          goto_previous_start = { ["[d"] = "@function.outer", ["[h"] = "@class.outer", ["[r"] = "@parameter.inner" },
+          goto_previous_end = { ["[D"] = "@function.outer", ["[H"] = "@class.outer", ["[R"] = "@parameter.inner" },
         },
       },
     },

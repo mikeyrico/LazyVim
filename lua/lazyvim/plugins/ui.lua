@@ -9,8 +9,8 @@ return {
       { "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete Non-Pinned Buffers" },
       { "<leader>br", "<Cmd>BufferLineCloseRight<CR>", desc = "Delete Buffers to the Right" },
       { "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>", desc = "Delete Buffers to the Left" },
-      { "<S-h>", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev Buffer" },
-      { "<S-l>", "<cmd>BufferLineCycleNext<cr>", desc = "Next Buffer" },
+      -- { "<S-h>", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev Buffer" },
+      -- { "<S-l>", "<cmd>BufferLineCycleNext<cr>", desc = "Next Buffer" },
       { "[b", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev Buffer" },
       { "]b", "<cmd>BufferLineCycleNext<cr>", desc = "Next Buffer" },
       { "[B", "<cmd>BufferLineMovePrev<cr>", desc = "Move buffer prev" },
@@ -24,7 +24,7 @@ return {
         -- stylua: ignore
         right_mouse_command = function(n) Snacks.bufdelete(n) end,
         diagnostics = "nvim_lsp",
-        always_show_bufferline = false,
+        always_show_bufferline = true,
         diagnostics_indicator = function(_, _, diag)
           local icons = LazyVim.config.icons.diagnostics
           local ret = (diag.error and icons.Error .. diag.error .. " " or "")
@@ -196,6 +196,9 @@ return {
     "folke/noice.nvim",
     event = "VeryLazy",
     opts = {
+      cmdline = {
+        view = "cmdline",
+      },
       lsp = {
         override = {
           ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
@@ -218,7 +221,7 @@ return {
       },
       presets = {
         bottom_search = true,
-        command_palette = true,
+        -- command_palette = true,
         long_message_to_split = true,
       },
     },
@@ -303,24 +306,27 @@ return {
             return LazyVim.pick(cmd, opts)()
           end,
           header = [[
-          ██╗      █████╗ ███████╗██╗   ██╗██╗   ██╗██╗███╗   ███╗          Z
-          ██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝██║   ██║██║████╗ ████║      Z    
-          ██║     ███████║  ███╔╝  ╚████╔╝ ██║   ██║██║██╔████╔██║   z       
-          ██║     ██╔══██║ ███╔╝    ╚██╔╝  ╚██╗ ██╔╝██║██║╚██╔╝██║ z         
-          ███████╗██║  ██║███████╗   ██║    ╚████╔╝ ██║██║ ╚═╝ ██║           
-          ╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝     ╚═══╝  ╚═╝╚═╝     ╚═╝           
+	                                                                     
+	       ████ ██████           █████      ██                     
+	      ███████████             █████                             
+	      █████████ ███████████████████ ███   ███████████   
+	     █████████  ███    █████████████ █████ ██████████████   
+	    █████████ ██████████ █████████ █████ █████ ████ █████   
+	  ███████████ ███    ███ █████████ █████ █████ ████ █████  
+	 ██████  █████████████████████ ████ █████ █████ ████ ██████ 
    ]],
           -- stylua: ignore
           ---@type snacks.dashboard.Item[]
           keys = {
-            { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+            { icon = " ", key = "f", desc = require("telescope.utils").path_tail(vim.fn.getcwd()), action = ":lua Snacks.dashboard.pick('files')" },
             { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
-            { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+            { icon = " ", key = "g", desc = "Find Text", action = ":Grepper" },
             { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
             { icon = " ", key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
             { icon = " ", key = "s", desc = "Restore Session", section = "session" },
             { icon = " ", key = "x", desc = "Lazy Extras", action = ":LazyExtras" },
             { icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy" },
+            { icon = " ", key = "t", desc = "Terminal", action = ":split | lua require('goatee').gotoTerminal(1)" },
             { icon = " ", key = "q", desc = "Quit", action = ":qa" },
           },
         },

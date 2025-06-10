@@ -9,7 +9,7 @@ return {
   -- add json to treesitter
   {
     "nvim-treesitter/nvim-treesitter",
-    opts = { ensure_installed = { "json5" } },
+    opts = { ensure_installed = { "json5", "json" } },
   },
 
   -- yaml schema support

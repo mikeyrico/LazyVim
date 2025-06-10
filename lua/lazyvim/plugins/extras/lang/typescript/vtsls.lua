@@ -47,6 +47,10 @@ return {
               suggest = {
                 completeFunctionCalls = true,
               },
+              tsserver = {
+                maxTsServerMemory = 8192,
+                nodePath = "node",
+              },
               inlayHints = {
                 enumMemberValues = { enabled = true },
                 functionLikeReturnTypes = { enabled = true },

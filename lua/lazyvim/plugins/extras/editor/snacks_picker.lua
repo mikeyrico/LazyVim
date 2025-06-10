@@ -42,6 +42,11 @@ return {
             },
           },
         },
+        formatters = {
+          file = {
+            truncate = 64,
+          },
+        },
         actions = {
           ---@param p snacks.Picker
           toggle_cwd = function(p)
@@ -52,6 +57,7 @@ return {
             p:find()
           end,
         },
+        layout = "bottom",
       },
     },
     -- stylua: ignore
@@ -65,8 +71,11 @@ return {
       { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
       { "<leader>fB", function() Snacks.picker.buffers({ hidden = true, nofile = true }) end, desc = "Buffers (all)" },
       { "<leader>fc", LazyVim.pick.config_files(), desc = "Find Config File" },
-      { "<leader>ff", LazyVim.pick("files"), desc = "Find Files (Root Dir)" },
-      { "<leader>fF", LazyVim.pick("files", { root = false }), desc = "Find Files (cwd)" },
+      { "<leader>fF", LazyVim.pick("files"), desc = "Find Files (Root Dir)" },
+      { "<leader>ff", LazyVim.pick("files", { root = false }), desc = "Find Files (cwd)" },
+      { "<leader>fl", function() 
+        Snacks.picker.files({ cwd = vim.fn.expand("%:h:.")})
+        end, desc = "Find Files (local to current file)" },
       { "<leader>fg", function() Snacks.picker.git_files() end, desc = "Find Files (git-files)" },
       { "<leader>fr", LazyVim.pick("oldfiles"), desc = "Recent" },
       { "<leader>fR", function() Snacks.picker.recent({ filter = { cwd = true }}) end, desc = "Recent (cwd)" },
@@ -74,8 +83,8 @@ return {
       -- git
       { "<leader>gd", function() Snacks.picker.git_diff() end, desc = "Git Diff (hunks)" },
       { "<leader>gD", function() Snacks.picker.git_diff({ base = "origin", group = true }) end, desc = "Git Diff (origin)" },
-      { "<leader>gs", function() Snacks.picker.git_status() end, desc = "Git Status" },
-      { "<leader>gS", function() Snacks.picker.git_stash() end, desc = "Git Stash" },
+      { "<leader>fs", function() Snacks.picker.git_status() end, desc = "Git Status" },
+      { "<leader>FS", function() Snacks.picker.git_stash() end, desc = "Git Stash" },
       { "<leader>gi", function() Snacks.picker.gh_issue() end, desc = "GitHub Issues (open)" },
       { "<leader>gI", function() Snacks.picker.gh_issue({ state = "all" }) end, desc = "GitHub Issues (all)" },
       { "<leader>gp", function() Snacks.picker.gh_pr() end, desc = "GitHub Pull Requests (open)" },

@@ -36,7 +36,7 @@ return {
     -- stylua: ignore
     keys = {
       { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
-      { "S", mode = { "n", "o", "x" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+      { "SS", mode = { "n", "o", "x" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
       { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
       { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
       { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
@@ -79,7 +79,7 @@ return {
           { "[", group = "prev" },
           { "]", group = "next" },
           { "g", group = "goto" },
-          { "gs", group = "surround" },
+          -- { "gs", group = "surround" },
           { "z", group = "fold" },
           {
             "<leader>b",
@@ -115,6 +115,9 @@ return {
           require("which-key").show({ keys = "<c-w>", loop = true })
         end,
         desc = "Window Hydra Mode (which-key)",
+      },
+      triggers_blacklist = {
+        n = { "<c-w>" },
       },
     },
     config = function(_, opts)
@@ -152,27 +155,53 @@ return {
       on_attach = function(buffer)
         local gs = package.loaded.gitsigns
 
+        local function altmap(mode, l, r, opts)
+          opts = opts or {}
+          opts.buffer = buffer
+          vim.keymap.set(mode, l, r, opts)
+        end
+
         local function map(mode, l, r, desc)
           vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc, silent = true })
         end
 
+        -- altmap("n", "]c", function()
+        --   if vim.wo.diff then
+        --     return "]c"
+        --   end
+        --   vim.schedule(function()
+        --     gs.nav_hunk("next")
+        --   end)
+        --   return "<Ignore>"
+        -- end, { expr = true })
+        --
+        -- altmap("n", "[c", function()
+        --   if vim.wo.diff then
+        --     return "[c"
+        --   end
+        --   vim.schedule(function()
+        --     gs.nav_hunk("prev")
+        --   end)
+        --   return "<Ignore>"
+        -- end, { expr = true })
+
         -- stylua: ignore start
-        map("n", "]h", function()
+        map("n", "]c", function()
           if vim.wo.diff then
             vim.cmd.normal({ "]c", bang = true })
           else
             gs.nav_hunk("next")
           end
         end, "Next Hunk")
-        map("n", "[h", function()
+        map("n", "[c", function()
           if vim.wo.diff then
             vim.cmd.normal({ "[c", bang = true })
           else
             gs.nav_hunk("prev")
           end
         end, "Prev Hunk")
-        map("n", "]H", function() gs.nav_hunk("last") end, "Last Hunk")
-        map("n", "[H", function() gs.nav_hunk("first") end, "First Hunk")
+        map("n", "]C", function() gs.nav_hunk("last") end, "Last Hunk")
+        map("n", "[C", function() gs.nav_hunk("first") end, "First Hunk")
         map({ "n", "x" }, "<leader>ghs", ":Gitsigns stage_hunk<CR>", "Stage Hunk")
         map({ "n", "x" }, "<leader>ghr", ":Gitsigns reset_hunk<CR>", "Reset Hunk")
         map("n", "<leader>ghS", gs.stage_buffer, "Stage Buffer")
@@ -184,6 +213,7 @@ return {
         map("n", "<leader>ghd", gs.diffthis, "Diff This")
         map("n", "<leader>ghD", function() gs.diffthis("~") end, "Diff This ~")
         map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
+        map({ "o", "x" }, "ic", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk") -- for use with ]c
       end,
     },
   },
